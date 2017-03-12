@@ -1,0 +1,55 @@
+﻿@model IEnumerable<MVCapp.Models.ShoppingCart>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>Kosár</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Termék neve
+        </th>
+        <th>
+            Mennyiség
+        </th>
+        <th>
+            Ár
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Count)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product.Price)
+        </td>
+        <td>
+            @Html.ActionLink("Remove", "Remove", new { id=item.ShoppingCartID })
+        </td>
+    </tr>
+}
+    <tr>
+        <th>
+            @Html.ActionLink("Vissza", "Index", "Products")
+        </th>
+        <th>
+            Szumma Ár
+        </th>
+        <th>
+           @ViewBag.Total
+        </th>
+        <th>
+            @Html.ActionLink("Fizetés", "Index", "Paypal")
+        </th>
+    </tr>
+</table>
+
+

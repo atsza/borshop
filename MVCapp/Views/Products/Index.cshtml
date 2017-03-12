@@ -1,0 +1,113 @@
+﻿
+@using Jmelosegui.Mvc.GoogleMap
+@model PagedList.IPagedList<MVCapp.Models.Product>
+@using PagedList.Mvc;
+@using MVCapp.Models;
+@using System.Drawing;
+@using Microsoft.AspNet.Identity
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>BorShop</h2>
+@{
+    var message = TempData["Message"] ?? string.Empty;
+}
+
+<script type="text/javascript">
+    var message = '@message';
+    if(message)
+        alert(message);
+</script>
+@if (User.Identity.Name == "admin@gmail.com")
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
+
+
+@{
+    var curr = (RegionCoordinates)ViewData["CurrentRegion"];
+}
+
+@using (Html.BeginForm("Index", "Products", FormMethod.Get))
+{
+<p>
+        Kategória: @Html.DropDownList("categoryString", "All")
+        Terméknév: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)       
+        Regió: @Html.DropDownList("regionString", "All")
+        <input type="submit" value="Szűrés" />
+    </p>
+    }
+    
+
+
+<table class="table">
+    <tr>
+        <th>
+            Rendezés:
+        </th>
+        <th>
+            @Html.ActionLink("Terméknév Szerint", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Ár Szerint", "Index", new { sortOrder = ViewBag.PriceParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th></th>
+    </tr>
+</table>
+
+<div class="row">
+    <div class="col-md-12">
+        @(Html.GoogleMap()
+              .Name("map")
+              .Height(500)
+              .Center(c => c.UseCurrentPosition())
+              .Zoom(7)
+              //.MarkersGeocoding(true)
+              .Markers(m => {
+                  m.Add()
+                    .Latitude(curr.Latitude)
+                    .Longitude(curr.Longitude)
+                    .Title(curr.RegionName);
+                    //.Icon("~/Content/Images/bor_icon.png", new Size(20, 32), new Point(0,0), new Point(10, 16));
+              })
+        )
+    </div>
+</div>
+@foreach (var item in Model) {
+    <div class="row">
+        <img src="@Url.Content("~/Content/Images/bottle.png")" alt="" />
+        <p>@Html.DisplayFor(modelItem => item.Name)</p>
+        <div class="col-xs-6 col-sm-8 col-lg-10">
+            <p>Kategória: @Html.DisplayFor(modelItem => item.Category.Name)</p>
+            <p>Ár: @Html.DisplayFor(modelItem => item.Price) Ft</p>
+            <p>Mennyiség: @Html.DisplayFor(modelItem => item.Quantity) db</p>                  
+        </div>
+        <div class="col-xs-6 col-sm-4 col-lg-2" style="background-color:lightgrey;">
+            <p>
+                @Html.ActionLink("Kosárba", "AddToCart","ShoppingCarts", new { id = item.ProductID },null) |
+                @if (User.Identity.Name == "admin@gmail.com")
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProductID })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductID })
+                }              
+            </p>
+        </div>
+    </div>
+            }
+
+
+
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+            @section scripts
+{
+                @(Html.GoogleMap().ScriptRegistrar())
+            }
