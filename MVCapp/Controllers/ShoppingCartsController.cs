@@ -13,15 +13,21 @@ namespace MVCapp.Controllers
 {
     public class ShoppingCartsController : Controller
     {
+        public string ActualUserId { get; set; }
+
+        private CurrentSession current = new CurrentSession();
+
         private OnlineShopDataContext db = new OnlineShopDataContext();
 
         // GET: ShoppingCarts
         public ActionResult List()
-        {            
+        {
+            ActualUserId = current.GetUserId();
             int total = 0;
             var q = from sc in db.ShoppingCart
                     join p in db.Products
                     on sc.ProductID equals p.ProductID
+                    where sc.UserID == ActualUserId
                     select new
                     {
                         p.Name,
@@ -35,15 +41,16 @@ namespace MVCapp.Controllers
                 total += a * b;
             }
             ViewBag.Total = total;
-            return View(db.ShoppingCart.ToList());
+            return View(db.ShoppingCart.Where(c => c.UserID == ActualUserId).ToList());
         }
 
         public ActionResult AddToCart(int id)
         {
             Product product = db.Products.Find(id);
-      
+
+            ActualUserId = current.GetUserId();
             var cart = db.ShoppingCart;
-            var target = cart.Where(c => c.Product.Name == product.Name && c.Count < product.Quantity);
+            var target = cart.Where(c => c.UserID == ActualUserId && c.Product.Name == product.Name && c.Count < product.Quantity);
             var overflow = cart.Where(c => c.Count >= product.Quantity);
             if (ModelState.IsValid)
             {
@@ -52,7 +59,9 @@ namespace MVCapp.Controllers
                     var cartItem = new ShoppingCart()
                     {
                         Product = product,
-                        Count = 1
+                        Count = 1,
+                        UserID = ActualUserId,
+                        DateCreated = DateTime.Now
                     };
                     db.ShoppingCart.Add(cartItem);
                     TempData["Message"] = "Hozzaadva";
@@ -102,4 +111,29 @@ namespace MVCapp.Controllers
             base.Dispose(disposing);
         }
     }
+
+    class CurrentSession
+    {
+        public const string CartSessionKey = "UserID";
+
+        public string GetUserId()
+        {
+            if (HttpContext.Current.Session[CartSessionKey] == null)
+            {
+                if (!string.IsNullOrWhiteSpace(HttpContext.Current.User.Identity.Name))
+                {
+                    HttpContext.Current.Session[CartSessionKey] = HttpContext.Current.User.Identity.Name;
+                }
+                else
+                {
+                    // Generate a new random GUID using System.Guid class.     
+                    Guid tempCartId = Guid.NewGuid();
+                    HttpContext.Current.Session[CartSessionKey] = tempCartId.ToString();
+                }
+            }
+            return HttpContext.Current.Session[CartSessionKey].ToString();
+        }
+    }
+
+
 }

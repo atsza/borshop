@@ -81,3 +81,6 @@ C:\Users\Ati\documents\visual studio 2015\Projects\MVCapp\MVCapp\bin\Microsoft.O
 C:\Users\Ati\documents\visual studio 2015\Projects\MVCapp\MVCapp\obj\Debug\MVCapp.dll
 C:\Users\Ati\documents\visual studio 2015\Projects\MVCapp\MVCapp\obj\Debug\MVCapp.pdb
 C:\Users\Ati\documents\visual studio 2015\Projects\MVCapp\MVCapp\obj\Debug\MVCapp.csprojResolveAssemblyReference.cache
+C:\Users\Ati\documents\visual studio 2015\Projects\MVCapp\MVCapp\obj\Debug\MVCapp.Migrations.InitialCreate.resources
+C:\Users\Ati\documents\visual studio 2015\Projects\MVCapp\MVCapp\obj\Debug\MVCapp.csproj.GenerateResource.Cache
+C:\Users\Ati\documents\visual studio 2015\Projects\MVCapp\MVCapp\obj\Debug\MVCapp.Migrations.Initial.resources
