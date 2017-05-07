@@ -1,12 +1,41 @@
 ﻿body {
+    background-color: #600505;
     padding-top: 50px;
     padding-bottom: 20px;
+    color: #ffffff;
+    font-family: Courier New, Times, sans-serif;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    width: 80%;
+    border: 2px solid #dedede;
+    border-radius: 11px;
+    margin-top: 40px;
+    padding: 20px;
+}
+
+.navbar {
+    background-color: #000000;
+}
+
+a {
+    font-weight: bold;
+    color: #676767;
+}
+
+a:hover {
+    font-weight: bold;
+    color: #989898;
+}
+
+.row {
+    margin-top: 15px;
+    margin-bottom: 30px;
+}
+
+.h2 {
+    font-weight: bold;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -17,8 +46,30 @@
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
+input, select, textarea {
     max-width: 280px;
+}
+
+.wine-name-text {
+    margin-top: 9px;
+    font-weight: bold;
+}
+
+.pagination a {
+    font-weight: bold;
+    color: #676767;
+}
+
+.pagination > .active > a {
+    background-color: #bababa !important;
+    border-color: #bababa !important;
+    color: #400505 !important
+}
+
+input[type="file"] {
+    max-width: 400px;
+}
+
+alert, label[for="file"] {
+    margin-top: 10px;
 }

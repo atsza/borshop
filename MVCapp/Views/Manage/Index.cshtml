@@ -3,7 +3,7 @@
     ViewBag.Title = "Manage";
 }
 
-<h2>@ViewBag.Title.</h2>
+<div class="h2">@ViewBag.Title.</div>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
@@ -64,7 +64,7 @@
                     {
                         @Html.AntiForgeryToken()
                         <text>Enabled
-                        <input type="submit" value="Disable" class="btn btn-link" />
+                        <input type="submit" class="btn" value="Disable" class="btn btn-link" />
                         </text>
                     }
                 }
@@ -74,7 +74,7 @@
                     {
                         @Html.AntiForgeryToken()
                         <text>Disabled
-                        <input type="submit" value="Enable" class="btn btn-link" />
+                        <input type="submit" class="btn" value="Enable" class="btn btn-link" />
                         </text>
                     }
                 }

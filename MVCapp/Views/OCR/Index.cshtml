@@ -1,34 +1,41 @@
-﻿@model IEnumerable < MVCapp.Models.Product >
+﻿@model IEnumerable<MVCapp.Models.Product>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Kép feltöltése</h2>
+<div class="h2">Kép feltöltése</div>
 @using (Html.BeginForm("Index", "OCR", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <label for="file">Kép feltöltése:</label>
     <input type="file" name="file" id="file" /><br><br>
-    <input type="submit" value="Feltöltés" />
+    <input type="submit" class="btn" value="Feltöltés" />
     <br><br>
-    @ViewBag.Message
-    if (ViewBag.Message == "Sikeres feltöltés")
+    string alertType = ViewBag.Message == "Sikeres feltöltés" ? "success" : "warning";
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-@alertType alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@ViewBag.Message!</strong>
+        </div>
+    }
+    if (alertType == "success")
     {
         foreach (var item in Model)
         {
-            <div class="row">
-                <img src="@Url.Content("~/Content/Images/bottle.png")" alt="" />
-                <p>@Html.DisplayFor(modelItem => item.Name)</p>
-                <div class="col-xs-6 col-sm-8 col-lg-10">
-                    <p>Kategória: @Html.DisplayFor(modelItem => item.Category.Name)</p>
-                    <p>Ár: @Html.DisplayFor(modelItem => item.Price) Ft</p>
-                    <p>Mennyiség: @Html.DisplayFor(modelItem => item.Quantity) db</p>
-                </div>
-                <div class="col-xs-6 col-sm-4 col-lg-2" style="background-color:lightgrey;">
-                    <p>
-                        @Html.ActionLink("Kosárba", "AddToCart", "ShoppingCarts", new { id = item.ProductID }, null) |                       
-                    </p>
-                </div>
+            <div class="col-lg-6">
+                <img class="wine-bottle-pic" src="@Url.Content("~/Content/Images/bottle.png")" alt="" />
+                <p class="wine-name-text">@Html.DisplayFor(modelItem => item.Name)</p>
+                <p>
+                    Kategória: @Html.DisplayFor(modelItem => item.Category.Name)
+                    <br />
+                    Ár: @Html.DisplayFor(modelItem => item.Price) Ft
+                    <br />
+                    Mennyiség: @Html.DisplayFor(modelItem => item.Quantity) db
+                </p>
+                <p>
+                    @Html.ActionLink("Kosárba", "AddToCart", "ShoppingCarts", new { id = item.ProductID }, null)
+                </p>
             </div>
         }
     }

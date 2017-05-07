@@ -3,11 +3,11 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Fizetés</h2>
-<h2>
+<div class="h2">Fizetés</div>
+<div class="h2">
     @Html.ActionLink("Fizetés Kártyával", "PaymentWithCreditCard")   |   
     <a href="@Url.Action("PaymentWithPaypal")">
         <img src="@Url.Content("~/Content/Images/paypal.png")" />
     </a>
-</h2>
+</div>
 

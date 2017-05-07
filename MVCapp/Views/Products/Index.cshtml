@@ -11,14 +11,14 @@
     ViewBag.Title = "Index";
 }
 
-<h2>BorShop</h2>
+<div class="h2">BorShop</div>
 @{
     var message = TempData["Message"] ?? string.Empty;
 }
 
 <script type="text/javascript">
     var message = '@message';
-    if(message)
+    if (message)
         alert(message);
 </script>
 @if (User.Identity.Name == "admin@gmail.com")
@@ -35,14 +35,14 @@
 
 @using (Html.BeginForm("Index", "Products", FormMethod.Get))
 {
-<p>
+    <p>
         Kategória: @Html.DropDownList("categoryString", "All")
-        Terméknév: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)       
+        Terméknév: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
         Regió: @Html.DropDownList("regionString", "All")
-        <input type="submit" value="Szűrés" />
+        <input type="submit" class="btn" value="Szűrés" />
     </p>
-    }
-    
+}
+
 
 
 <table class="table">
@@ -63,42 +63,50 @@
 <div class="row">
     <div class="col-md-12">
         @(Html.GoogleMap()
-              .Name("map")
-              .Height(500)
-              .Center(c => c.UseCurrentPosition())
-              .Zoom(7)
-              //.MarkersGeocoding(true)
-              .Markers(m => {
-                  m.Add()
-                    .Latitude(curr.Latitude)
-                    .Longitude(curr.Longitude)
-                    .Title(curr.RegionName);
-                    //.Icon("~/Content/Images/bor_icon.png", new Size(20, 32), new Point(0,0), new Point(10, 16));
-              })
+          .Name("map")
+          .Height(500)
+          .Center(c => c.UseCurrentPosition())
+          .Zoom(7)
+          //.MarkersGeocoding(true)
+          .Markers(m =>
+          {
+              m.Add()
+                .Latitude(curr.Latitude)
+                .Longitude(curr.Longitude)
+                .Title(curr.RegionName);
+              //.Icon("~/Content/Images/bor_icon.png", new Size(20, 32), new Point(0,0), new Point(10, 16));
+          })
         )
     </div>
 </div>
-@foreach (var item in Model) {
-    <div class="row">
-        <img src="@Url.Content("~/Content/Images/bottle.png")" alt="" />
-        <p>@Html.DisplayFor(modelItem => item.Name)</p>
-        <div class="col-xs-6 col-sm-8 col-lg-10">
-            <p>Kategória: @Html.DisplayFor(modelItem => item.Category.Name)</p>
-            <p>Ár: @Html.DisplayFor(modelItem => item.Price) Ft</p>
-            <p>Mennyiség: @Html.DisplayFor(modelItem => item.Quantity) db</p>                  
-        </div>
-        <div class="col-xs-6 col-sm-4 col-lg-2" style="background-color:lightgrey;">
+@foreach (var item in Model)
+{
+   if (true)
+   {
+        <div class="col-lg-4">
+            <img class="wine-bottle-pic" src="@Url.Content("~/Content/Images/bottle.png")" alt="" />
+            <p class="wine-name-text">@Html.DisplayFor(modelItem => item.Name)</p>
             <p>
-                @Html.ActionLink("Kosárba", "AddToCart","ShoppingCarts", new { id = item.ProductID },null) |
-                @if (User.Identity.Name == "admin@gmail.com")
-                {
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ProductID })
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductID })
-                }              
+                Kategória: @Html.DisplayFor(modelItem => item.Category.Name)
+                <br/>
+                Ár: @Html.DisplayFor(modelItem => item.Price) Ft
+                <br />
+                Mennyiség: @Html.DisplayFor(modelItem => item.Quantity) db
+            </p>
+            <p>
+                <b>
+                    @Html.ActionLink("Kosárba", "AddToCart", "ShoppingCarts", new { id = item.ProductID }, null) |
+                    @if (User.Identity.Name == "admin@gmail.com")
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ProductID })
+                        @Html.Raw(" | ");
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ProductID })
+                    }
+                </b>
             </p>
         </div>
-    </div>
-            }
+    }
+}
 
 
 

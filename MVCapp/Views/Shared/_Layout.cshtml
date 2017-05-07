@@ -21,8 +21,8 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Kosár", "List", "ShoppingCarts")</li> 
-                    <li>@Html.ActionLink("Keresés kép alapján", "Index", "OCR")</li> 
+                    <li><a href="@Url.Action("List", "ShoppingCarts")"><span class="glyphicon glyphicon-shopping-cart"></span> Kosár</a></li> 
+                    <li><a href="@Url.Action("Index", "OCR")"><span class="glyphicon glyphicon-search"></span> Keresés kép alapján</a></li> 
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

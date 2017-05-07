@@ -90,7 +90,7 @@
         <br />
         <br />
         <br />
-        <h2 class="subheading">Contents</h2>
+        <h2 class="subheading">Contents</div>
         <p>
           <a href="docSet_default.html#_Toc279155864">Introduction</a>
         </p>
@@ -135,11 +135,75 @@
           <br />
           <li>Enter the <b>Test Accounts</b> section and create a PayPal Business account (to represent a seller) on the PayPal Sandbox. To do this, you can follow the instructions from this <a href="https://www.x.com/docs/DOC-1379">PayPal Documentation page</a>. Make note of the <b>Login e-mail</b> of the new Business account.</li>
           <li>Add the following lines to the <b>_AppStart.cshtml</b> page of your WebMatrix site (you’ll have to create if it doesn’t exist) to initialize the Managed Buttons and Adaptive Payments APIs of the PayPal Helper. Replace the placeholders with your PayPal API credentials.<div class="code"><span codeLanguage="other"><table width="100%" cellspacing="0" cellpadding="0"><tr><th>Razor</th><th><span class="copyCode" onclick="CopyCode(this)" onkeypress="CopyCode_CheckKey(this)" onmouseover="ChangeCopyCodeIcon(this)" onfocusin="ChangeCopyCodeIcon(this)" onmouseout="ChangeCopyCodeIcon(this)" onfocusout="ChangeCopyCodeIcon(this)" tabindex="0"><img class="copyCodeImage" name="ccImage" align="absmiddle" src="../local/copycode.gif" />Copy Code
-                  </span></th></tr><tr><td colspan="2"><pre>@{    PayPal.Profile.Initialize(            "{yourAPIUsername}",            "{yourAPIPassword}",            "{yourSignature}",            "sandbox");    // General Adaptive Payments’ properties    PayPal.Profile.Language = "en_US";    PayPal.Profile.CancelUrl = "http://www.mystore.com/ohtoobad.cshtml";    PayPal.Profile.ReturnUrl = "http://www.mystore.com/thanks.cshtml";    PayPal.Profile.IpnUrl = "http://www.mystore.com/notifications.cshtml";    PayPal.Profile.CurrencyCode = "USD";}</pre></td></tr></table></span></div><br /></li>
+                  </span></th></tr><tr><td colspan="2"><pre>@{
+    PayPal.Profile.Initialize(
+            "{yourAPIUsername}",
+            "{yourAPIPassword}",
+            "{yourSignature}",
+            "sandbox");
+
+    // General Adaptive Payments’ properties
+    PayPal.Profile.Language = "en_US";
+    PayPal.Profile.CancelUrl = "http://www.mystore.com/ohtoobad.cshtml";
+    PayPal.Profile.ReturnUrl = "http://www.mystore.com/thanks.cshtml";
+    PayPal.Profile.IpnUrl = "http://www.mystore.com/notifications.cshtml";
+    PayPal.Profile.CurrencyCode = "USD";
+}
+</pre></td></tr></table></span></div><br /></li>
           <li>Add the highlighted lines from below in the page where you want to show a <b>PayPal Add To Cart</b> button. The "<i>{sellerEmail}</i>" placeholder should be changed by the e-mail of the seller account you’ve configured previously. <b>Notice that this code is for sample purposes only and will create a PayPal button each time the page is rendered</b>; on your implementation you can store the button’s <i>WebSiteCode</i> value in a database.<div class="code"><span codeLanguage="other"><table width="100%" cellspacing="0" cellpadding="0"><tr><th>Razor</th><th><span class="copyCode" onclick="CopyCode(this)" onkeypress="CopyCode_CheckKey(this)" onmouseover="ChangeCopyCodeIcon(this)" onfocusin="ChangeCopyCodeIcon(this)" onmouseout="ChangeCopyCodeIcon(this)" onfocusout="ChangeCopyCodeIcon(this)" tabindex="0"><img class="copyCodeImage" name="ccImage" align="absmiddle" src="../local/copycode.gif" />Copy Code
-                  </span></th></tr><tr><td colspan="2"><pre><b>@{</b><b>    var payPalButton = PayPal.ButtonManager.AddToCartButton.Create(</b><b>                                                business : "{sellerEmail}", </b><b>                                                itemName : "My Product", </b><b>                                                amount : "99.99");</b><b>    HtmlString payPalButtonHtml = new HtmlString(payPalButton.WebSiteCode);</b><b>}</b>&lt;!DOCTYPE html&gt;&lt;html&gt;    &lt;head&gt;        ...    &lt;/head&gt;    &lt;body&gt;        ...<b>        @payPalButtonHtml</b>        ...    &lt;/body&gt;&lt;/html&gt;</pre></td></tr></table></span></div><p>Now, if you login to PayPal (remember to use your Sandbox account if you have been using that) and click the <b>Profile</b> link and then <b>My Saved Buttons</b> under <b>Selling Preferences</b>, you will be able to see the button you have just created.</p></li>
+                  </span></th></tr><tr><td colspan="2"><pre><b>@{</b>
+<b>    var payPalButton = PayPal.ButtonManager.AddToCartButton.Create(</b>
+<b>                                                business : "{sellerEmail}", </b>
+<b>                                                itemName : "My Product", </b>
+<b>                                                amount : "99.99");</b>
+
+<b>    HtmlString payPalButtonHtml = new HtmlString(payPalButton.WebSiteCode);</b>
+
+<b>}</b>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+    &lt;head&gt;
+        ...
+    &lt;/head&gt;
+    &lt;body&gt;
+        ...
+<b>        @payPalButtonHtml</b>
+        ...
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre></td></tr></table></span></div><p>Now, if you login to PayPal (remember to use your Sandbox account if you have been using that) and click the <b>Profile</b> link and then <b>My Saved Buttons</b> under <b>Selling Preferences</b>, you will be able to see the button you have just created.</p></li>
           <li>Now let’s test the Adaptive Payments API, by executing a chained payment. Suppose that you have a list of suppliers that you want to pay whenever an item is sold through your online application. Create a new web page and add the following highlighted code. Replace the “<i>{storeEmail}</i>” and “<i>{supplierEmail}</i>” placeholders with two different PayPal sandbox (or real) accounts.<div class="code"><span codeLanguage="other"><table width="100%" cellspacing="0" cellpadding="0"><tr><th>Razor</th><th><span class="copyCode" onclick="CopyCode(this)" onkeypress="CopyCode_CheckKey(this)" onmouseover="ChangeCopyCodeIcon(this)" onfocusin="ChangeCopyCodeIcon(this)" onmouseout="ChangeCopyCodeIcon(this)" onfocusout="ChangeCopyCodeIcon(this)" tabindex="0"><img class="copyCodeImage" name="ccImage" align="absmiddle" src="../local/copycode.gif" />Copy Code
-                  </span></th></tr><tr><td colspan="2"><pre><b>@{</b><b>    var productPrice = 99.99m;</b><b>    var supplierAmount = decimal.Round(productPrice * .10m, 2);</b><b></b><b>    var MyStore = new PayPal.AdaptivePayments.Receiver();</b><b>    MyStore.amount = productPrice;</b><b>    MyStore.email = "{storeEmail}";</b><b></b><b>    var Suppliers = new List&lt;PayPal.AdaptivePayments.Receiver&gt;();</b><b>    var Supplier = new PayPal.AdaptivePayments.Receiver();</b><b>    Supplier.email = "{supplierEmail}";</b><b>    Supplier.amount = supplierAmount;</b><b>    Suppliers.Add(Supplier);</b><b></b><b>    var response = PayPal.AdaptivePayments.ChainedPay.Execute(MyStore, Suppliers, "", "Test Payment", "127.0.0.1", "MyDevice");</b><b></b><b>    response.Redirect();</b><b>}</b>&lt;!DOCTYPE html&gt;&lt;html&gt;    &lt;head&gt;        ...    &lt;/head&gt;    &lt;body&gt;        ...    &lt;/body&gt;&lt;/html&gt;</pre></td></tr></table></span></div><p>You prepare the payment by setting up a single instance of a “receiver” which is the store that is receiving the payment. After that, you setup a list of receivers, which represents our suppliers (or other people that we need to pay after the transaction); each one will receive 10% of the product price.</p></li>
+                  </span></th></tr><tr><td colspan="2"><pre><b>@{</b>
+<b>    var productPrice = 99.99m;</b>
+<b>    var supplierAmount = decimal.Round(productPrice * .10m, 2);</b>
+<b></b>
+<b>    var MyStore = new PayPal.AdaptivePayments.Receiver();</b>
+<b>    MyStore.amount = productPrice;</b>
+<b>    MyStore.email = "{storeEmail}";</b>
+<b></b>
+<b>    var Suppliers = new List&lt;PayPal.AdaptivePayments.Receiver&gt;();</b>
+<b>    var Supplier = new PayPal.AdaptivePayments.Receiver();</b>
+<b>    Supplier.email = "{supplierEmail}";</b>
+<b>    Supplier.amount = supplierAmount;</b>
+<b>    Suppliers.Add(Supplier);</b>
+<b></b>
+<b>    var response = PayPal.AdaptivePayments.ChainedPay.Execute(MyStore, Suppliers, "", "Test Payment", "127.0.0.1", "MyDevice");</b>
+<b></b>
+<b>    response.Redirect();</b>
+<b>}</b>
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+    &lt;head&gt;
+        ...
+    &lt;/head&gt;
+    &lt;body&gt;
+        ...
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre></td></tr></table></span></div><p>You prepare the payment by setting up a single instance of a “receiver” which is the store that is receiving the payment. After that, you setup a list of receivers, which represents our suppliers (or other people that we need to pay after the transaction); each one will receive 10% of the product price.</p></li>
         </ol>
         <a name="_Toc279155866" href="#">
           <span />
